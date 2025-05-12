@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>  <head>
+    <title>Steganografi EXIF GPS</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="js/piexif.js"></script>
+    <script src="js/encode.js"></script>
+    <script src="js/decode.js"></script>
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+    <link rel="stylesheet" href="style/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  </head>
+  <body>    <!-- Dark mode toggle button -->
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Dark/Light Mode">
+      <i class="fas fa-moon"></i>
+    </button>
+    
+    <!-- Header Section -->
+    <div class="header animate__animated animate__fadeIn">
+      <h2>STEGANOGRAFI DENGAN METODE TRANSFORM DOMAIN MENGGUNAKAN EXIF GPS</h2>
+      <p id="toolDesc">Enkode dan dekode pesan rahasia dalam data EXIF GPS gambar Anda. Semua pemrosesan dilakukan secara lokal di browser.</p>
+    </div>
+    
+    <!-- Tab Navigation -->
+    <div class="tab">
+      <button class="tablinks" onclick="openTab(event, 'Encode')">
+        <i class="fas fa-lock"></i> Enkoding
+      </button>
+      <button class="tablinks" onclick="openTab(event, 'Decode')">
+        <i class="fas fa-unlock"></i> Dekoding
+      </button>
+    </div>    <div id="Encode" class="tabcontent">
+      <h3><i class="fas fa-lock"></i> Enkoding Pesan</h3>
+      <form onsubmit="if (checkJpg() && checkCoord('latCust') && checkCoord('lngCust')){handleFileSelectEnc();}return false;">
+        <div class="form-group">
+          <label for="files"><i class="fas fa-image"></i> Pilih File Gambar (JPEG)</label>
+          <input
+            type="file"
+            id="files"
+            class="form-control"
+            accept="image/jpeg"
+            onchange="checkJpg();"
+            required
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="message"><i class="fas fa-key"></i> Pesan Rahasia (2-16 karakter)</label>
+          <input
+            type="text"
+            id="message"
+            name="message"
+            class="form-control"
+            required
+            minlength="2"
+            maxlength="16"
+            placeholder="Masukkan pesan rahasia..."
+            pattern="[0-9A-Za-z \.!?,]{2,16}"
+          />
+        </div>
+        
+        <div class="form-group">
+          <input
+            type="checkbox"
+            id="eraseData"
+            name="eraseData"
+          />
+          <label for="eraseData">Hapus data EXIF lain (Direkomendasikan)</label>
+        </div>
+        
+        <div class="form-group">
+          <input
+            type="checkbox"
+            id="randomCoords"
+            name="randomCoords"
+            checked
+            onchange="hideCoordsPicker()"
+          />
+          <label for="randomCoords">Gunakan Koordinat GPS Acak</label>
+        </div>
+        
+        <div id="customCoordsContainer" style="display: none">
+          <h4><i class="fas fa-map-marker-alt"></i> Koordinat GPS Kustom</h4>
+          <table id="coordTable">
+            <tr>
+              <td><label for="latCust">Latitude:</label></td>
+              <td>
+                <input
+                  type="number"
+                  id="latCust"
+                  name="latCust"
+                  class="form-control"
+                  value="34.118323"
+                  step="any"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td><label for="lngCust">Longitude:</label></td>
+              <td>
+                <input
+                  type="number"
+                  id="lngCust"
+                  name="lngCust"
+                  class="form-control"
+                  value="-118.300358"
+                  step="any"
+                />
+              </td>
+            </tr>
+          </table>
+        </div>
+        
+        <button id="encButton" type="submit">
+          <i class="fas fa-lock"></i> Enkode Pesan
+        </button>
+      </form>
+      
+      <div id="encDetailsContainer" style="display: none">
+        <h4><i class="fas fa-check-circle"></i> Hasil Enkoding</h4>
+        <div class="result-item" id="clearMessage"></div>
+        <div class="result-item" id="encodedMessage"></div>
+        <div class="result-item" id="coordinatesDecDegrees"></div>
+        <div class="result-item" id="coordinatesDMS"></div>
+        <div class="downloadContainer">
+          <span id="imageSpan" style="display: none">Gambar Hasil: </span>
+          <a
+            id="downloadButton"
+            href=""
+            download="encoded.jpg"
+            style="display: none"
+          >
+            <i class="fas fa-download"></i> Download Gambar
+          </a>
+        </div>
+        <div class="processedImageContainer" id="image"></div>
+      </div>
+    </div>    <div id="Decode" class="tabcontent">
+      <h3><i class="fas fa-unlock"></i> Dekoding Pesan</h3>
+      
+      <div class="form-group">
+        <label for="fDec"><i class="fas fa-image"></i> Pilih File Gambar dengan Pesan Tersembunyi</label>
+        <input
+          id="fDec"
+          type="file"
+          name="jpg"
+          class="form-control"
+          accept="image/jpeg"
+        />
+      </div>
+      
+      <div class="result-panel">
+        <div class="result-item" style="display: none" id="coordinatesDMSRationalDec"></div>
+        <div class="result-item" style="display: none" id="coordinatesDMSDec"></div>
+        <div class="result-item" style="display: none" id="coordinatesDecDegreesDec"></div>
+        <div class="result-item" style="display: none" id="encodedMessageDec"></div>
+        
+        <div class="result-message" style="display: none" id="clearMessageDec"></div>
+        
+        <div class="error-message" style="display: none" id="errorDec">
+          <i class="fas fa-exclamation-triangle"></i> Tidak ada pesan tersembunyi yang terdeteksi.
+        </div>
+      </div>
+
+      <div class="processedImageContainer" id="imageDec"></div>
+    </div>
+
+    <script>
+      function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+
+        if (evt == null) {
+          document.getElementsByClassName("tablinks")[0].className += " active";
+        } else {
+          evt.currentTarget.className += " active";
+        }
+      }      openTab(event, "Encode");
+
+      document
+        .getElementById("fDec")
+        .addEventListener("change", handleFileSelectDec, false);
+        
+      // Dark mode functionality
+      function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const icon = document.querySelector('.dark-mode-toggle i');
+        if (icon.classList.contains('fa-moon')) {
+          icon.classList.remove('fa-moon');
+          icon.classList.add('fa-sun');
+        } else {
+          icon.classList.remove('fa-sun');
+          icon.classList.add('fa-moon');
+        }
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+      }
+      
+      // Check if user previously enabled dark mode
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.dark-mode-toggle i').classList.remove('fa-moon');
+        document.querySelector('.dark-mode-toggle i').classList.add('fa-sun');
+      }
+      
+      // Add animation classes when elements become visible
+      function addAnimations() {
+        const tabButtons = document.querySelectorAll('.tablinks');
+        tabButtons.forEach((button, index) => {
+          button.classList.add('animate__animated', 'animate__fadeInDown');
+          button.style.animationDelay = `${0.2 + (index * 0.1)}s`;
+        });
+        
+        const formGroups = document.querySelectorAll('.form-group');
+        formGroups.forEach((group, index) => {
+          group.classList.add('animate__animated', 'animate__fadeInUp');
+          group.style.animationDelay = `${0.3 + (index * 0.1)}s`;
+        });
+      }
+      
+      // Call animation function after page load
+      window.addEventListener('load', addAnimations);
+    </script>
+    
+    <style>
+      /* Dark mode styles */
+      .dark-mode {
+        background: linear-gradient(135deg, #121212 0%, #2c3e50 100%);
+        color: #e0e0e0;
+      }
+      
+      .dark-mode .tabcontent,
+      .dark-mode .form-control,
+      .dark-mode .result-item,
+      .dark-mode #customCoordsContainer,
+      .dark-mode #encDetailsContainer,
+      .dark-mode .processedImageContainer {
+        background-color: rgba(30, 30, 30, 0.95);
+        color: #e0e0e0;
+      }
+      
+      .dark-mode .tab {
+        background-color: rgba(40, 40, 40, 0.95);
+      }
+      
+      .dark-mode .tab button {
+        color: #e0e0e0;
+      }
+      
+      .dark-mode .form-control {
+        border-color: #444;
+        color: #e0e0e0;
+      }
+      
+      .dark-mode .form-control:focus {
+        border-color: #6dd5fa;
+        box-shadow: 0 0 0 4px rgba(109, 213, 250, 0.2);
+      }
+      
+      .dark-mode h3, 
+      .dark-mode h4, 
+      .dark-mode label {
+        color: #e0e0e0;
+      }
+      
+      .dark-mode input[type=file].form-control {
+        background-color: rgba(40, 40, 40, 0.8);
+        border-color: #444;
+      }
+      
+      .dark-mode .result-item {
+        border-left-color: #6dd5fa;
+      }
+      
+      /* Animation for tab switching */
+      .tabcontent {
+        animation: fadeEffect 0.5s;
+      }
+      
+      @keyframes fadeEffect {
+        from {opacity: 0; transform: translateY(20px);}
+        to {opacity: 1; transform: translateY(0);}
+      }
+    </style>
+      <footer class="footer">
+      <p>&copy; 2025 Steganografi EXIF GPS | oleh Senor D kilki <i class="fas fa-shield-alt"></i></p>
+    </footer>
+  </body>
+</html>
