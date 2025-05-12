@@ -250,9 +250,19 @@
       .dark-mode .tab {
         background-color: rgba(40, 40, 40, 0.95);
       }
-      
-      .dark-mode .tab button {
+        .dark-mode .tab button {
         color: #e0e0e0;
+      }
+      
+      .dark-mode .tab button:hover {
+        background-color: rgba(255, 105, 180, 0.1);
+        color: #FF69B4;
+      }
+      
+      .dark-mode .tab button.active {
+        background-color: #FF69B4;
+        color: white;
+        box-shadow: 0 4px 10px rgba(255, 105, 180, 0.3);
       }
       
       .dark-mode .form-control {
@@ -260,9 +270,9 @@
         color: #e0e0e0;
       }
       
-      .dark-mode .form-control:focus {
-        border-color: #6dd5fa;
-        box-shadow: 0 0 0 4px rgba(109, 213, 250, 0.2);
+    .dark-mode .form-control:focus {
+        border-color: #FF69B4; /* Changed to pink (Hot Pink) */
+        box-shadow: 0 0 0 4px rgba(255, 105, 180, 0.2);
       }
       
       .dark-mode h3, 
@@ -277,7 +287,20 @@
       }
       
       .dark-mode .result-item {
-        border-left-color: #6dd5fa;
+        border-left-color: #FF69B4; /* Changed to pink (Hot Pink) */
+      }
+        /* Button styles for dark mode */
+      .dark-mode #encButton,
+      .dark-mode .btn,
+      .dark-mode #downloadButton {
+        background: linear-gradient(135deg, #FF69B4, #FF1493); /* Pink gradient in dark mode */
+      }
+      
+      .dark-mode #encButton:hover,
+      .dark-mode .btn:hover,
+      .dark-mode #downloadButton:hover {
+        background: linear-gradient(135deg, #FF1493, #C71585); /* Darker pink gradient on hover */
+        box-shadow: 0 6px 15px rgba(255, 105, 180, 0.4);
       }
       
       /* Animation for tab switching */

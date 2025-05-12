@@ -91,14 +91,14 @@ body {
 }
 
 .tab button:hover {
-  background-color: rgba(52, 152, 219, 0.1);
-  color: #3498db;
+  background-color: rgba(138, 43, 226, 0.1);
+  color: #8A2BE2; /* Changed to purple (BlueViolet) */
 }
 
 .tab button.active {
-  background-color: #3498db;
+  background-color: #8A2BE2; /* Changed to purple (BlueViolet) */
   color: white;
-  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 4px 10px rgba(138, 43, 226, 0.3);
   transform: translateY(-2px);
 }
 
@@ -127,7 +127,7 @@ body {
 }
 
 .btn {
-  background: linear-gradient(135deg, #3a6186, #89253e);
+  background: linear-gradient(135deg, #663399, #4B0082); /* Changed to purple gradients */
   color: white;
   border: none;
   border-radius: 8px;
@@ -158,9 +158,9 @@ body {
 }
 
 .btn:hover {
-  background: linear-gradient(135deg, #45526c, #a53860);
+  background: linear-gradient(135deg, #9370DB, #8A2BE2); /* Lighter purple gradient on hover */
   transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 15px rgba(138, 43, 226, 0.3);
 }
 
 .btn:hover::after {
@@ -168,7 +168,7 @@ body {
 }
 
 #encButton {
-  background: linear-gradient(135deg, #3a6186, #89253e);
+  background: linear-gradient(135deg, #663399, #4B0082); /* Changed to purple gradients */
   color: white;
   border: none;
   border-radius: 8px;
@@ -199,9 +199,9 @@ body {
 }
 
 #encButton:hover {
-  background: linear-gradient(135deg, #45526c, #a53860);
+  background: linear-gradient(135deg, #9370DB, #8A2BE2); /* Lighter purple gradient on hover */
   transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 15px rgba(138, 43, 226, 0.3);
 }
 
 #encButton:hover::after {
@@ -231,8 +231,8 @@ body {
 }
 
 .form-control:focus {
-  border-color: #3a6186;
-  box-shadow: 0 0 0 4px rgba(58, 97, 134, 0.15);
+  border-color: #663399; /* Changed to purple */
+  box-shadow: 0 0 0 4px rgba(102, 51, 153, 0.15);
   outline: none;
   transform: translateY(-2px);
 }
@@ -247,7 +247,7 @@ body {
 
 .form-group label i {
   margin-right: 8px;
-  color: #89253e;
+  color: #663399; /* Changed to purple */
 }
 
 input[type=file].form-control {
@@ -269,11 +269,11 @@ input[type=file].form-control:hover {
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  border-left: 5px solid #89253e;
+  border-left: 5px solid #663399; /* Changed to purple */
 }
 
 #customCoordsContainer h4 {
-  color: #3a6186;
+  color: #663399; /* Changed to purple */
   margin-bottom: 15px;
   font-weight: 600;
 }
@@ -333,7 +333,7 @@ input[type=file].form-control:hover {
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 15px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  border-top: 5px solid #3a6186;
+  border-top: 5px solid #663399; /* Changed to purple */
   position: relative;
   overflow: hidden;
   animation: fadeIn 0.5s ease-out;
@@ -345,13 +345,13 @@ input[type=file].form-control:hover {
 }
 
 #encDetailsContainer h4 {
-  color: #3a6186;
+  color: #663399; /* Changed to purple */
   margin-bottom: 20px;
   font-size: 1.3rem;
 }
 
 #downloadButton {
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  background: linear-gradient(135deg, #663399, #4B0082); /* Changed to purple gradient */
   color: white;
   border: none;
   border-radius: 8px;
@@ -364,13 +364,13 @@ input[type=file].form-control:hover {
   margin: 20px 0;
   transition: all 0.4s ease;
   cursor: pointer;
-  box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+  box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
 }
 
 #downloadButton:hover {
-  background: linear-gradient(135deg, #27ae60, #219653);
+  background: linear-gradient(135deg, #9370DB, #8A2BE2); /* Lighter purple gradient on hover */
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+  box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);
 }
 
 .downloadContainer {
@@ -385,7 +385,7 @@ input[type=file].form-control:hover {
   padding: 16px;
   background-color: rgba(249, 250, 251, 0.9);
   border-radius: 10px;
-  border-left: 4px solid #3a6186;
+  border-left: 4px solid #663399; /* Changed to purple */
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
   animation: slideIn 0.4s ease-out;
