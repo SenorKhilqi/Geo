@@ -63,20 +63,26 @@ function printExif(dataURL) {
       "; " +
       gpsIfd[piexif.GPSIFD.GPSLongitude][2][0] /
         gpsIfd[piexif.GPSIFD.GPSLongitude][2][1];
-    $("#coordinatesDMSDec").html("Coordinates in DMS: " + coordsDMS);
-
-    var coordsDecDegrees =
-      piexif.GPSHelper.dmsRationalToDeg(
+    $("#coordinatesDMSDec").html("Coordinates in DMS: " + coordsDMS);    var exactLat, exactLng;
+    
+    // Try to get the exact values from custom EXIF tags
+    if (gpsIfd[piexif.GPSIFD.GPSProcessingMethod] && gpsIfd[piexif.GPSIFD.GPSSatellites]) {
+      exactLat = gpsIfd[piexif.GPSIFD.GPSProcessingMethod];
+      exactLng = gpsIfd[piexif.GPSIFD.GPSSatellites];
+    } else {
+      // Fall back to calculated values if exact values aren't available
+      exactLat = piexif.GPSHelper.dmsRationalToDeg(
         gpsIfd[piexif.GPSIFD.GPSLatitude],
         gpsIfd[piexif.GPSIFD.GPSLatitudeRef]
-      ) +
-      ", " +
-      piexif.GPSHelper.dmsRationalToDeg(
+      ).toString();
+      exactLng = piexif.GPSHelper.dmsRationalToDeg(
         gpsIfd[piexif.GPSIFD.GPSLongitude],
         gpsIfd[piexif.GPSIFD.GPSLongitudeRef]
-      );
+      ).toString();
+    }
+    
     $("#coordinatesDecDegreesDec").html(
-      "Coordinates in decimal degrees: " + coordsDecDegrees
+      "<strong>Koordinat (Desimal):</strong> " + exactLat + ", " + exactLng
     );
 
     var encodedMessage = `${gpsIfd[piexif.GPSIFD.GPSLatitude][2][0]}${

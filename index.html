@@ -82,17 +82,16 @@
         
         <div id="customCoordsContainer" style="display: none">
           <h4><i class="fas fa-map-marker-alt"></i> Koordinat GPS Kustom</h4>
-          <table id="coordTable">
-            <tr>
+          <table id="coordTable">            <tr>
               <td><label for="latCust">Latitude:</label></td>
               <td>
                 <input
-                  type="number"
+                  type="text"
                   id="latCust"
                   name="latCust"
                   class="form-control"
                   value="34.118323"
-                  step="any"
+                  placeholder="Contoh: -6.918071"
                 />
               </td>
             </tr>
@@ -100,12 +99,12 @@
               <td><label for="lngCust">Longitude:</label></td>
               <td>
                 <input
-                  type="number"
+                  type="text"
                   id="lngCust"
                   name="lngCust"
                   class="form-control"
                   value="-118.300358"
-                  step="any"
+                  placeholder="Contoh: 107.618202"
                 />
               </td>
             </tr>
@@ -118,17 +117,16 @@
       </form>
       
       <div id="encDetailsContainer" style="display: none">
-        <h4><i class="fas fa-check-circle"></i> Hasil Enkoding</h4>
-        <div class="result-item" id="clearMessage"></div>
+        <h4><i class="fas fa-check-circle"></i> Hasil Enkoding</h4>        <div class="result-item" id="clearMessage"></div>
         <div class="result-item" id="encodedMessage"></div>
         <div class="result-item" id="coordinatesDecDegrees"></div>
         <div class="result-item" id="coordinatesDMS"></div>
+        <div class="result-item" id="fileNameInfo" style="display: none"></div>
         <div class="downloadContainer">
-          <span id="imageSpan" style="display: none">Gambar Hasil: </span>
-          <a
+          <span id="imageSpan" style="display: none">Gambar Hasil: </span>          <a
             id="downloadButton"
             href=""
-            download="encoded.jpg"
+            download=""
             style="display: none"
           >
             <i class="fas fa-download"></i> Download Gambar
@@ -184,11 +182,28 @@
         } else {
           evt.currentTarget.className += " active";
         }
-      }      openTab(event, "Encode");
+      }
+      
+      // Initialize the first tab
+      openTab(null, "Encode");
 
       document
         .getElementById("fDec")
         .addEventListener("change", handleFileSelectDec, false);
+        
+      // Mengambil nomor file terakhir dari localStorage saat halaman dimuat
+      window.onload = function() {
+        // Mendapatkan nomor file counter dari localStorage jika ada
+        var savedCounter = localStorage.getItem('fileCounter');
+        if (savedCounter) {
+          fileCounter = parseInt(savedCounter);
+        }
+      };
+      
+      // Menyimpan nomor file counter ke localStorage saat halaman ditutup
+      window.onbeforeunload = function() {
+        localStorage.setItem('fileCounter', fileCounter.toString());
+      };
         
       // Dark mode functionality
       function toggleDarkMode() {
@@ -235,6 +250,20 @@
       .dark-mode {
         background: linear-gradient(135deg, #121212 0%, #2c3e50 100%);
         color: #e0e0e0;
+      }
+      
+      /* Styling untuk informasi nama file */
+      #fileNameInfo {
+        font-weight: normal;
+        margin-bottom: 10px;
+        border-left: 4px solid #007bff;
+        padding-left: 12px;
+        background-color: rgba(0, 123, 255, 0.05);
+      }
+      
+      .dark-mode #fileNameInfo {
+        border-left-color: #FF69B4;
+        background-color: rgba(255, 105, 180, 0.05);
       }
       
       .dark-mode .tabcontent,
